@@ -1,9 +1,93 @@
-getgenv().Speed = true
-getgenv().FakeMacro = true
-	local sound = Instance.new("Sound")
-	sound.SoundId = "rbxassetid://413861777"
-	sound.Parent = game:GetService("SoundService")
-	sound:Play()
+if game.PlaceId ~= 9825515356 then
+    game.Players.LocalPlayer:Kick("unsupported game detected.")
+    return
+end
+
+local data = {
+    P = game:GetService("Players"),
+    T = game:GetService("TweenService"),
+    L = game:GetService("Lighting"),
+    RS = game:GetService("RunService"),
+    RS2 = game:GetService("ReplicatedStorage"),
+
+    plr = game:GetService("Players").LocalPlayer,
+    gui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"),
+
+    sG = Instance.new("ScreenGui"),
+    iF = Instance.new("Frame"),
+    iI = Instance.new("ImageLabel"),
+    aR = Instance.new("UIAspectRatioConstraint"),
+    bE = Instance.new("BlurEffect")
+}
+
+data.sG.Name = "IntroScreen"
+data.sG.Parent = data.gui
+
+data.iF.Name = "IntroFrame"
+data.iF.Size = UDim2.new(1, 0, 1, 0)
+data.iF.BackgroundTransparency = 1
+data.iF.Parent = data.sG
+
+data.iI.Name = "IntroImage"
+data.iI.Size = UDim2.new(1, 0, 0.5, 0)
+data.iI.Position = UDim2.new(0.5, 0, 0.5, 0)
+data.iI.AnchorPoint = Vector2.new(0.5, 0.5)
+data.iI.Image = "http://www.roblox.com/asset/?id=115872236085908"
+data.iI.BackgroundTransparency = 1
+data.iI.ImageTransparency = 1
+data.iI.Parent = data.iF
+
+data.aR.Parent = data.iI
+
+data.bE.Size = 50
+data.bE.Parent = data.L
+
+task.spawn(function()
+    local fI = data.T:Create(data.iI, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0})
+    local fO = data.T:Create(data.iI, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 1})
+
+    fI:Play()
+    fI.Completed:Wait()
+
+    task.wait(3)
+    fO:Play()
+    fO.Completed:Wait()
+
+    data.bE:Destroy()
+    data.sG:Destroy()
+end)
+
+local sound = {
+    AssetId = "rbxassetid://6577321647",  -- Zamień <AssetId> na prawdziwy AssetId dźwięku
+    Parent = game.Workspace,  -- Możesz zmienić parent na inny obiekt, np. postać gracza
+    Volume = 0,  -- Początkowa głośność
+    Duration = 5,  -- Czas fade-in w sekundach
+}
+
+-- Tworzymy obiekt dźwięku w grze
+local soundInstance = Instance.new("Sound")
+soundInstance.SoundId = sound.AssetId
+soundInstance.Parent = sound.Parent
+soundInstance.Volume = sound.Volume
+
+-- Odtwarzanie dźwięku
+soundInstance:Play()
+
+-- Funkcja do podgłaśniania dźwięku
+local function fadeInSound(duration)
+    local startVolume = soundInstance.Volume
+    local targetVolume = 2  -- Chcemy osiągnąć pełną głośność
+    local step = (targetVolume - startVolume) / duration
+
+    -- Stopniowe podgłaśnianie dźwięku
+    for i = 0, duration, 0.1 do
+        soundInstance.Volume = soundInstance.Volume + step
+        wait(0.1)
+    end
+end
+
+-- Wywołujemy funkcję podgłaśniania przez 5 sekund (możesz zmienić czas)
+fadeInSound(sound.Duration)
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zvxvaz/PiterNaGitHub/refs/heads/main/gui.lua"))()
 local Window = Library:CreateWindow("swindle.cc (beta)", Vector2.new(492, 598), Enum.KeyCode.RightControl)
@@ -105,13 +189,19 @@ getgenv().TargetStrafe = {
 }
 
 -- Load services
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local Workspace = game:GetService("Workspace")
-local LocalPlayer = Players.LocalPlayer
-local Camera = Workspace.CurrentCamera
-local Mouse = LocalPlayer:GetMouse()
+local Services = {
+    Players = game:GetService("Players"),
+    RunService = game:GetService("RunService"),
+    UserInputService = game:GetService("UserInputService"),
+    Workspace = game:GetService("Workspace")
+}
+
+local data = {
+    LocalPlayer = Services.Players.LocalPlayer,
+    Camera = Services.Workspace.CurrentCamera,
+    Mouse = Services.Players.LocalPlayer:GetMouse()
+}
+
 
 -- Variables
 local target = nil
