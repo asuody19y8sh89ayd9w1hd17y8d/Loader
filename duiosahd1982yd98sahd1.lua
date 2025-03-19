@@ -1,3 +1,7 @@
+local enabled = true
+
+if not enabled then return end
+
 if game.PlaceId ~= 9825515356 then
     game.Players.LocalPlayer:Kick("unsupported game detected.")
     return
