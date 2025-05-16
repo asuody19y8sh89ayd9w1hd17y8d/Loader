@@ -1,3 +1,15 @@
+for Key, Object in pairs(getgc(true)) do
+    if type(Object) == "table" then
+        setreadonly(Object, false)
+        local indexInstance = rawget(Object, "indexInstance")
+        if type(indexInstance) == "table" and indexInstance[1] == "kick" then
+            setreadonly(indexInstance, false)
+            rawset(Object, "Table", {"kick", function() coroutine.yield() end})
+            break
+        end
+    end
+end
+
 if not getgenv().Loaded then
     getgenv().Loaded = true
     game:GetService("StarterGui"):SetCore("SendNotification", {
